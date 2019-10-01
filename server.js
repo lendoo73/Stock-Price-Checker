@@ -11,6 +11,24 @@ var runner            = require('./test-runner');
 
 var app = express();
 
+const helmet = require("helmet");
+const uuidv4 = require('uuid/v4');
+
+app.use((req, res, next) => {
+  res.locals.nonce = uuidv4()
+  next()
+});
+
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    styleSrc: ["'self'", "'unsafe-inline'"],
+    scriptSrc: ["'self'", "'unsafe-inline'", "code.jquery.com"],
+    imgSrc: ["'self'", "hyperdev.com", "glitch.com"]
+  },
+  browserSniff: false
+}));
+
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.use(cors({origin: '*'})); //For FCC testing purposes only
