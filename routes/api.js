@@ -151,7 +151,7 @@ module.exports = function (app) {
             response.send(stockdata);
           }
         });
-      } else {
+      } else if (typeof req.query.stock === "object") {
         // Compare and get relative likes:
         if (!(testInput(req.query.stock[0])) || !(testInput(req.query.stock[1]))) return response.send({error: "Invalid user input."});
         const symbol1 = req.query.stock[0].toUpperCase();
@@ -196,6 +196,6 @@ module.exports = function (app) {
             response.send(stockdata);
           }
         });
-      }
+      } else response.send("Invalid user input.");
     });  
 };
